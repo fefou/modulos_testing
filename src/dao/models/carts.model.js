@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
-const cartsEsquema = new mongoose.Schema({
 
+const cartsEsquema = new mongoose.Schema({
     products: [
         {
             product:{
@@ -15,8 +15,7 @@ const cartsEsquema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-
-})
+}, { timestamps: true });
 
 cartsEsquema.plugin(paginate)
 export const cartsModelo = mongoose.model("carts", cartsEsquema)

@@ -34,5 +34,10 @@
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.11.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0",
+    "supertest": "^6.3.4"
+  }
 }
