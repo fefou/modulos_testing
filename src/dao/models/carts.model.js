@@ -4,14 +4,18 @@ import paginate from "mongoose-paginate-v2";
 const cartsEsquema = new mongoose.Schema({
     products: [
         {
-            product:{
+            product: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "products",                
+                ref: "products",
             },
             quantity: Number
         }
     ],
     deleted: {
+        type: Boolean,
+        default: false
+    },
+    isTest: {
         type: Boolean,
         default: false
     }

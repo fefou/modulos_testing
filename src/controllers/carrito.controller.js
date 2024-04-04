@@ -54,15 +54,23 @@ export class CarritoController {
   }
 
   static async postCarrito(req, res) {
-    let carrito = [];
-
     try {
-      carrito = await cartsModelo.create({ productsModelo: [] });
+      // Leer los datos del cuerpo de la solicitud
+      const { isTest } = req.body;
+
+      // Crear un nuevo carrito con los datos proporcionados
+      const nuevoCarrito = await cartsModelo.create({
+        productsModelo: [],
+        isTest: isTest || false, // Asignar el valor de isTest de la solicitud o establecerlo en false por defecto
+      });
+
+      // Enviar una respuesta exitosa con el carrito creado
+      return res.status(201).json({ success: true, carrito: nuevoCarrito });
     } catch (error) {
-      req.logger.error("no se pudo crear un carrito", error.message);
+      // Manejar cualquier error que ocurra durante la creación del carrito
+      req.logger.error("No se pudo crear un carrito", error.message);
+      return res.status(500).json({ error: "Error al crear el carrito", message: error.message });
     }
-    res.setHeader("Content-Type", "application/json");
-    res.status(201).json({ carrito });
   }
 
   static async postCarritoProducto(req, res) {
@@ -231,19 +239,19 @@ export class CarritoController {
 
       // Calcula el monto total y verifica el stock de los productos
       const amount = cart.products.reduce((total, product) => {
-  if (product.product.stock < product.quantity) {
-    outOfStockProducts.push(product);
-    return total;
-  }
+        if (product.product.stock < product.quantity) {
+          outOfStockProducts.push(product);
+          return total;
+        }
 
-  product.product.stock -= product.quantity;
-  return total + product.product.price * product.quantity;
-}, 0);
+        product.product.stock -= product.quantity;
+        return total + product.product.price * product.quantity;
+      }, 0);
 
-// Guarda los productos uno por uno
-for (const product of cart.products) {
-  await product.product.save();
-}
+      // Guarda los productos uno por uno
+      for (const product of cart.products) {
+        await product.product.save();
+      }
 
       // Crea un nuevo ticket
       const ticket = new ticketModelo({

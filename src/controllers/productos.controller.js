@@ -95,7 +95,7 @@ export class ProductosController {
 
       // Crear el nuevo producto
 
-      let ownerUser = await usuariosModelo.findById(req.user._id).lean();
+      
       const nuevoProducto = await productsModelo.create({
         title,
         description,
@@ -103,7 +103,7 @@ export class ProductosController {
         code,
         stock,
         category,
-        owner: ownerUser // Establecer el propietario como el usuario actualmente autenticado
+        owner: (req.user._id) // Establecer el propietario como el usuario actualmente autenticado
       });
 
       console.log(nuevoProducto)
